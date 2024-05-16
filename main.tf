@@ -7,6 +7,14 @@ terraform {
   }
 }
 
+module "cloud-storage" {
+  source     = "terraform-google-modules/cloud-storage/google"
+  version    = "3.4.1"
+  names      = ["hashicat"]
+  prefix     = var.prefix
+  project_id = var.project
+}
+
 provider "google" {
   project = var.project
   region  = var.region
@@ -66,7 +74,9 @@ resource "google_compute_instance" "hashicat" {
   tags = ["http-server"]
 
   labels = {
-    name = "hashicat"
+    name        = "hashicat",
+    environment = "production",
+    department  = "hashicat-social"
   }
 
 }
